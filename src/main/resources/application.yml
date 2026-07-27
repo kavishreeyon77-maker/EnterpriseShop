@@ -1,0 +1,43 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: cart-checkout
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://cart_admin:cartPassword123@ac-od1lz4x-shard-00-00.idltrvz.mongodb.net:27017,ac-od1lz4x-shard-00-01.idltrvz.mongodb.net:27017,ac-od1lz4x-shard-00-02.idltrvz.mongodb.net:27017/cart_checkout?authSource=admin&replicaSet=atlas-11i2ik-shard-0&ssl=true}
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  cache:
+    type: ${CACHE_TYPE:redis}
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:9a4f2c8d3e1b7f0a5c2d8e4b7a1f3c5d6e2a9b4c7d0e3f8a1b5c9d6e2f4a7b9c}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000} # 24 hours
+    refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000} # 7 days
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+
+logging:
+  level:
+    root: INFO
+    com.enterprise.cartcheckout: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

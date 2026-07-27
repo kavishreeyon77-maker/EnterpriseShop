@@ -1,0 +1,20 @@
+spring:
+  cache:
+    type: redis
+  data:
+    mongodb:
+      uri: ${PROD_MONGODB_URI}
+    redis:
+      host: ${PROD_REDIS_HOST}
+      port: ${PROD_REDIS_PORT}
+      password: ${PROD_REDIS_PASSWORD}
+  rabbitmq:
+    host: ${PROD_RABBITMQ_HOST}
+    port: ${PROD_RABBITMQ_PORT}
+    username: ${PROD_RABBITMQ_USERNAME}
+    password: ${PROD_RABBITMQ_PASSWORD}
+
+logging:
+  level:
+    root: WARN
+    com.enterprise.cartcheckout: INFO

@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: cart_mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - cart_network
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: cart_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - cart_network
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: cart_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - cart_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cart_app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_URI=mongodb://admin:password@mongodb:27017/cartcheckout?authSource=admin
+      # In production, use MongoDB Atlas URI directly in the application config or secrets
+      # - SPRING_DATA_MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/cartcheckout
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - JWT_SECRET=5K9s4nQp6m2B4g9M0z6N2h3Y4k5Q3v7R8d1T0p4V6l8A5q3U9n7C2w1Y6r4Z3x5
+      - JWT_EXPIRATION_MS=86400000
+    depends_on:
+      - mongodb
+      - redis
+      - rabbitmq
+    networks:
+      - cart_network
+
+volumes:
+  mongodb_data:
+
+networks:
+  cart_network:
+    driver: bridge

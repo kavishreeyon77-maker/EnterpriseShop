@@ -39,9 +39,14 @@ Uses simple in-memory caching and bypasses RabbitMQ. Connects to MongoDB Atlas.
 Spins up Redis and RabbitMQ via Docker Compose.
 
 ```bash
+cp .env.example .env
+# edit .env with your deployment values
+
 docker-compose up -d
 ./mvnw spring-boot:run
 ```
+
+For deployment, update the values in `.env` for your database, Redis, RabbitMQ, and JWT settings.
 
 ## API Documentation
 
